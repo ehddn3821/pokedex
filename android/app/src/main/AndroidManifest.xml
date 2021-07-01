@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dwkang.pokedex">
    <application
-        android:label="pokedex"
+        android:label="포켓몬도감"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
