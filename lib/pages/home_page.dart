@@ -77,11 +77,20 @@ class _HomePageState extends State<HomePage> {
   void initPokeScrap() async {
     final webScraper = WebScraper('https://www.pokemonkorea.co.kr');
     final searchText = myController.text;
-
     final endpoint = '/pokedex?word=$searchText';
+
     if (await webScraper.loadWebPage(endpoint)) {
       // 이전 검색값 초기화
       searchResults = <SearchResult>[];
+
+      // 포켓몬 id
+      final idElements = webScraper.getElementAttribute(
+          '#pokedexlist > li > a', 'href');
+      final searchId = <String>[];
+      idElements.forEach((element) {
+        final id = element;
+        searchId.add(id!);
+      });
 
       // 포켓몬 이름
       final nameElements =
@@ -111,17 +120,17 @@ class _HomePageState extends State<HomePage> {
       });
 
       // 포켓몬 추가 설명
-      final descElements =
+      final addDescElements =
           webScraper.getElement('#pokedexlist > li > a > div.bx-txt > p', []);
-      final searchDesc = <String>[];
-      descElements.forEach((element) {
-        final desc = element['title'];
-        searchDesc.add(desc);
+      final searchAddDesc = <String>[];
+      addDescElements.forEach((element) {
+        final addDesc = element['title'];
+        searchAddDesc.add(addDesc);
       });
 
       for (int i = 0; i < searchNames.length; i++) {
         searchResults.add(SearchResult(
-            searchNames[i], searchImgUrls[i], searchType[i], searchDesc[i]));
+            searchId[i], searchNames[i], searchImgUrls[i], searchType[i], '', searchAddDesc[i], ''));
       }
 
       if (mounted) {
