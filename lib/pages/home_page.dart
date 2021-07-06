@@ -11,7 +11,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final myController = TextEditingController();
-
   var searchResults = <SearchResult>[];
 
   @override
@@ -37,16 +36,15 @@ class _HomePageState extends State<HomePage> {
                     border: OutlineInputBorder(),
                     labelText: '포켓몬 이름이나 번호, 타입 등을 입력해보세요.',
                   ),
-                  onSubmitted: (value) {
+                  onSubmitted: (value) async {
                     if (myController.text.isNotEmpty) {
-                      initPokeScrap();
-                      Future.delayed(
-                          Duration(milliseconds: 300),
-                          () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SearchResultPage(
-                                      searchResults: searchResults))));
+                      CircularProgressIndicator();
+                      await initPokeScrap();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchResultPage(
+                                  searchResults: searchResults)));
                     } else {
                       showToast('검색어를 입력해주세요.');
                     }
@@ -54,16 +52,15 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 10),
               FloatingActionButton(
                   child: Icon(Icons.search),
-                  onPressed: () {
+                  onPressed: () async {
                     if (myController.text.isNotEmpty) {
-                      initPokeScrap();
-                      Future.delayed(
-                          Duration(milliseconds: 300),
-                          () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => SearchResultPage(
-                                      searchResults: searchResults))));
+                      CircularProgressIndicator();
+                      await initPokeScrap();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchResultPage(
+                                  searchResults: searchResults)));
                     } else {
                       showToast('검색어를 입력해주세요.');
                     }
@@ -74,7 +71,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   // Web Scraper
-  void initPokeScrap() async {
+  Future<bool> initPokeScrap() async {
     final webScraper = WebScraper('https://www.pokemonkorea.co.kr');
     final searchText = myController.text;
     final endpoint = '/pokedex?word=$searchText';
@@ -84,8 +81,8 @@ class _HomePageState extends State<HomePage> {
       searchResults = <SearchResult>[];
 
       // 포켓몬 id
-      final idElements = webScraper.getElementAttribute(
-          '#pokedexlist > li > a', 'href');
+      final idElements =
+          webScraper.getElementAttribute('#pokedexlist > li > a', 'href');
       final searchId = <String>[];
       idElements.forEach((element) {
         final id = element;
@@ -110,15 +107,6 @@ class _HomePageState extends State<HomePage> {
         searchImgUrls.add(imgUrl!);
       });
 
-      // 포켓몬 타입
-      final typeElements = webScraper
-          .getElement('#pokedexlist > li > a > div.bx-txt > span', []);
-      final searchType = <String>[];
-      typeElements.forEach((element) {
-        final type = element['title'];
-        searchType.add(type);
-      });
-
       // 포켓몬 추가 설명
       final addDescElements =
           webScraper.getElement('#pokedexlist > li > a > div.bx-txt > p', []);
@@ -129,8 +117,8 @@ class _HomePageState extends State<HomePage> {
       });
 
       for (int i = 0; i < searchNames.length; i++) {
-        searchResults.add(SearchResult(
-            searchId[i], searchNames[i], searchImgUrls[i], searchType[i], '', searchAddDesc[i], ''));
+        searchResults.add(SearchResult(searchId[i], searchNames[i],
+            searchImgUrls[i], '', '', searchAddDesc[i], ''));
       }
 
       if (mounted) {
@@ -139,10 +127,11 @@ class _HomePageState extends State<HomePage> {
         });
       }
     }
+    return true;
   }
 }
 
-// Toast 메시지 설정
+// Toast 메시지
 void showToast(String msg) {
   Fluttertoast.showToast(
       msg: msg,

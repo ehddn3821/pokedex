@@ -23,7 +23,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    final double itemHeight = (size.height - 15) / 3;
+    final double itemHeight = size.height / 3;
     final double itemWidth = size.width / 2;
 
     return Scaffold(
@@ -33,17 +33,15 @@ class _SearchResultPageState extends State<SearchResultPage> {
             childAspectRatio: (itemWidth / itemHeight),
             children: List.generate(searchResults.length, (index) {
               return Container(
-                  padding: EdgeInsets.all(20.0),
+                  padding: EdgeInsets.all(10.0),
                   child: InkWell(
-                    onTap: () {
-                      initPokeScrap(searchResults[index].id!);
-                      Future.delayed(
-                          Duration(milliseconds: 300),
-                          () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      DetailPage(searchResult: searchResult))));
+                    onTap: () async {
+                      await initPokeScrap(searchResults[index].id!);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  DetailPage(searchResult: searchResult)));
                     },
                     child: Column(
                       children: <Widget>[
@@ -52,17 +50,10 @@ class _SearchResultPageState extends State<SearchResultPage> {
                           // 이름
                           '${searchResults[index].name}',
                           style: new TextStyle(
-                              fontSize: 16.0, fontWeight: FontWeight.bold),
+                              fontSize: 15.0, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 12),
-                        Text(
-                          // 타입
-                          '${searchResults[index].type} 타입',
-                          style: new TextStyle(
-                              fontSize: 15.0, fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(height: 12),
-                        Text('${searchResults[index].desc}') // 부가 설명
+                        Text('${searchResults[index].addDesc}') // 부가 설명
                       ],
                     ),
                   ));
@@ -70,7 +61,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
   }
 
   // Web Scraper
-  void initPokeScrap(String searchText) async {
+  Future<bool> initPokeScrap(String searchText) async {
     final webScraper = WebScraper('https://www.pokemonkorea.co.kr');
 
     // 포켓몬 인덱스 추출
@@ -101,7 +92,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
         searchImgUrls.add(imgUrl!);
       });
 
-      // 포켓몬 타입 ㅇ
+      // 포켓몬 타입
       final typeElements1 = webScraper.getElement(
           '#top > div.book-ct > div > div > div:last-child > div.bx-detail > div:nth-child(1) > div:nth-child(1) > div > span:nth-child(1) > p',
           []);
@@ -109,6 +100,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
           '#top > div.book-ct > div > div > div:last-child > div.bx-detail > div:nth-child(1) > div:nth-child(1) > div > span:last-child > p',
           []);
       final searchTypes = <String>[];
+      String searchType;
       typeElements1.forEach((element) {
         final type = element['title'];
         searchTypes.add(type);
@@ -117,7 +109,11 @@ class _SearchResultPageState extends State<SearchResultPage> {
         final type = element['title'];
         searchTypes.add(type);
       });
-      final searchType = '${searchTypes[0]}, ${searchTypes[1]}';
+      if (searchTypes[0] != searchTypes[1]) {
+        searchType = '${searchTypes[0]}, ${searchTypes[1]} 타입';
+      } else {
+        searchType = '${searchTypes[0]} 타입';
+      }
 
       // 포켓몬 설명
       final descElements = webScraper.getElement(
@@ -157,5 +153,6 @@ class _SearchResultPageState extends State<SearchResultPage> {
         });
       }
     }
+    return true;
   }
 }
