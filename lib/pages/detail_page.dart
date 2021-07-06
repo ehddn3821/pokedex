@@ -20,7 +20,10 @@ class _DetailState extends State<DetailPage> {
     var result = searchResult[0];
     int idx = result.name.indexOf('.');
     String pokeId = result.name.substring(0, idx + 5);
-    String pokeName = result.name.substring(idx + 6);
+    String pokeName1 = result.name.substring(idx + 6);
+    int addDescIdx = result.addDesc!.length;
+    int pokeNameLength = pokeName1.length;
+    String pokeName2 = pokeName1.substring(0, pokeNameLength - addDescIdx);
 
     return Scaffold(
       appBar: AppBar(
@@ -34,22 +37,30 @@ class _DetailState extends State<DetailPage> {
             children: [
               Image.network(result.imgUrl),
               SizedBox(height: 20.0),
-              Text(pokeName,
+              Text(pokeName2,
                   style: new TextStyle(
                       fontSize: 32.0, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center),
-              Text(result.addDesc!),
-              SizedBox(height: 20.0),
               Text(
-                '${result.type} / ${result.group!}',
-                style:
-                    new TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600),
+                result.addDesc!,
+                style: new TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black54),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 20.0),
               Text(
-                  result.desc!,
-                style: new TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+                '${result.type} / ${result.group!}',
+                style:
+                    new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 30.0),
+              Text(
+                result.desc!,
+                style:
+                    new TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
               ),
             ],
           )),

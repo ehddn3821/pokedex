@@ -51,20 +51,21 @@ class _HomePageState extends State<HomePage> {
                   }),
               SizedBox(height: 10),
               FloatingActionButton(
-                  child: Icon(Icons.search),
-                  onPressed: () async {
-                    if (myController.text.isNotEmpty) {
-                      CircularProgressIndicator();
-                      await initPokeScrap();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SearchResultPage(
-                                  searchResults: searchResults)));
-                    } else {
-                      showToast('검색어를 입력해주세요.');
-                    }
-                  })
+                child: Icon(Icons.search),
+                onPressed: () async {
+                  if (myController.text.isNotEmpty) {
+                    CircularProgressIndicator();
+                    await initPokeScrap();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SearchResultPage(
+                                searchResults: searchResults)));
+                  } else {
+                    showToast('검색어를 입력해주세요.');
+                  }
+                },
+              )
             ],
           ),
         ));
