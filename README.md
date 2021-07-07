@@ -6,4 +6,4 @@
 
 #### https://www.pokemonkorea.co.kr/ (포켓몬 공식 사이트)를 Web Scraping 하여 만들었습니다 
 
-![pokedex](https://user-images.githubusercontent.com/55382624/124765623-1ca7f580-df71-11eb-9502-f9374b4b7402.gif)
+![pokedex](https://user-images.githubusercontent.com/55382624/124766968-59282100-df72-11eb-8c14-9ef10f687655.gif)
