@@ -26,38 +26,63 @@ class _SearchResultPageState extends State<SearchResultPage> {
     final double itemHeight = size.height / 3;
     final double itemWidth = size.width / 2;
 
-    return Scaffold(
-        appBar: AppBar(title: Text('검색 결과')),
-        body: GridView.count(
-            crossAxisCount: 2,
-            childAspectRatio: (itemWidth / itemHeight),
-            children: List.generate(searchResults.length, (index) {
-              return Container(
-                  padding: EdgeInsets.all(10.0),
-                  child: InkWell(
-                    onTap: () async {
-                      await initPokeScrap(searchResults[index].id!);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  DetailPage(searchResult: searchResult)));
-                    },
-                    child: Column(
-                      children: <Widget>[
-                        Image.network(searchResults[index].imgUrl), // 이미지
-                        Text(
-                          // 이름
-                          '${searchResults[index].name}',
-                          style: new TextStyle(
-                              fontSize: 15.0, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 12),
-                        Text('${searchResults[index].addDesc}') // 부가 설명
-                      ],
-                    ),
-                  ));
-            })));
+    // 검색 결과가 있을 때
+    if (searchResults.isNotEmpty) {
+      return Scaffold(
+          appBar: AppBar(title: Text('검색 결과')),
+          body: GridView.count(
+              crossAxisCount: 2,
+              childAspectRatio: (itemWidth / itemHeight),
+              children: List.generate(searchResults.length, (index) {
+                return Container(
+                    padding: EdgeInsets.all(10.0),
+                    child: InkWell(
+                      onTap: () async {
+                        await initPokeScrap(searchResults[index].id!);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    DetailPage(searchResult: searchResult)));
+                      },
+                      child: Column(
+                        children: <Widget>[
+                          Image.network(searchResults[index].imgUrl), // 이미지
+                          Text(
+                            // 이름
+                            '${searchResults[index].name}',
+                            style: new TextStyle(
+                                fontSize: 15.0, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 12),
+                          Text('${searchResults[index].addDesc}') // 부가 설명
+                        ],
+                      ),
+                    ));
+              })));
+    } else {
+      // 검색 결과가 없을 때
+      return Scaffold(
+          appBar: AppBar(title: Text('검색 결과')),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: 100),
+              Image(
+                image: AssetImage('images/notresult.png'),
+                width: 200,
+                height: 200,
+              ),
+              Text(
+                '검색 결과가 없습니다.',
+                style:
+                    new TextStyle(fontSize: 18.0, fontWeight: FontWeight.w500),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ));
+    }
   }
 
   // Web Scraper

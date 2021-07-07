@@ -24,12 +24,13 @@ class _HomePageState extends State<HomePage> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Container(
           padding: EdgeInsets.all(20.0),
-          color: Color(0xffffffff), // 로고 이미지와 배경색 같게
+          // color: Color(0xffffffff), // 로고 이미지와 배경색 같게
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center, // 상하 중앙정렬
             crossAxisAlignment: CrossAxisAlignment.stretch, // 좌우 화면크기랑 같게
             children: [
-              Image(image: AssetImage('images/logo.png')),
+              Image(image: AssetImage('images/logo.png'),
+              height: 250),
               TextField(
                   controller: myController,
                   decoration: InputDecoration(
@@ -136,7 +137,7 @@ class _HomePageState extends State<HomePage> {
 void showToast(String msg) {
   Fluttertoast.showToast(
       msg: msg,
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.grey,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.CENTER,
       textColor: Colors.white);
