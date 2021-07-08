@@ -3,22 +3,17 @@ import "package:flutter/material.dart";
 import 'home_page.dart';
 import 'favorite_page.dart';
 
-
 class MainPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
-
   var _selectedTabIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text('Pokédex'),
-      // ),
       body: _buildPage(_selectedTabIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
@@ -43,7 +38,7 @@ class _MainPageState extends State<MainPage> {
 }
 
 Widget _buildPage(index) {
-  if (index == 0) 
+  if (index == 0)
     return HomePage();
   else
     return FavoritePage();
