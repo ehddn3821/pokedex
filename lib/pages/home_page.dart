@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/pages/search_result_page.dart';
+import 'package:pokedex/pages/web_page.dart';
 import 'package:web_scraper/web_scraper.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -24,13 +25,22 @@ class _HomePageState extends State<HomePage> {
         onTap: () => FocusScope.of(context).unfocus(),
         child: Container(
           padding: EdgeInsets.all(20.0),
-          // color: Color(0xffffffff), // 로고 이미지와 배경색 같게
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center, // 상하 중앙정렬
             crossAxisAlignment: CrossAxisAlignment.stretch, // 좌우 화면크기랑 같게
             children: [
-              Image(image: AssetImage('images/logo.png'),
-              height: 250),
+              Image(image: AssetImage('images/logo.png'), height: 180),
+              MaterialButton(
+                  child: Text('🔥  포켓몬 공식 사이트 가기  🔥',
+                      style: TextStyle(fontSize: 18.0)),
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.redAccent, width: 2)
+                  ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => WebPage()));
+                  }),
+              SizedBox(height: 20),
               TextField(
                   controller: myController,
                   decoration: InputDecoration(

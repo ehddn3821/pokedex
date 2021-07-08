@@ -58,7 +58,6 @@ class _DetailState extends State<DetailPage> {
                   IconButton(
                     icon: Icon(icon),
                     color: Colors.red,
-                    alignment: Alignment.centerRight,
                     onPressed: () {
                       setState(() {
                         if (isSelected) {
