@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final myController = TextEditingController();
-  var searchResults = <SearchResult>[];
+  var searchResults = <Pokemon>[];
 
   @override
   void initState() {
@@ -34,8 +34,7 @@ class _HomePageState extends State<HomePage> {
                   child: Text('🔥  포켓몬 공식 사이트 가기  🔥',
                       style: TextStyle(fontSize: 18.0)),
                   shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.redAccent, width: 2)
-                  ),
+                      side: BorderSide(color: Colors.redAccent, width: 2)),
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => WebPage()));
@@ -90,7 +89,7 @@ class _HomePageState extends State<HomePage> {
 
     if (await webScraper.loadWebPage(endpoint)) {
       // 이전 검색값 초기화
-      searchResults = <SearchResult>[];
+      searchResults = <Pokemon>[];
 
       // 포켓몬 id
       final idElements =
@@ -129,8 +128,16 @@ class _HomePageState extends State<HomePage> {
       });
 
       for (int i = 0; i < searchNames.length; i++) {
-        searchResults.add(SearchResult(searchId[i], searchNames[i],
-            searchImgUrls[i], '', '', searchAddDesc[i], ''));
+        // Pokemon(searchId[i], searchNames[i],
+        //     searchImgUrls[i], '', '', searchAddDesc[i], '')
+        searchResults.add(Pokemon(
+            id: searchId[i],
+            name: searchNames[i],
+            imgUrl: searchImgUrls[i],
+            type: '',
+            desc: '',
+            addDesc: searchAddDesc[i],
+            species: ''));
       }
 
       if (mounted) {

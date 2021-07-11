@@ -5,7 +5,7 @@ import 'package:web_scraper/web_scraper.dart';
 import 'detail_page.dart';
 
 class SearchResultPage extends StatefulWidget {
-  var searchResults = <SearchResult>[];
+  var searchResults = <Pokemon>[];
 
   SearchResultPage({required this.searchResults});
 
@@ -14,8 +14,8 @@ class SearchResultPage extends StatefulWidget {
 }
 
 class _SearchResultPageState extends State<SearchResultPage> {
-  var searchResults = <SearchResult>[];
-  var searchResult = <SearchResult>[];
+  var searchResults = <Pokemon>[];
+  var searchResult = <Pokemon>[];
 
   _SearchResultPageState(this.searchResults);
 
@@ -38,7 +38,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
                     padding: EdgeInsets.all(10.0),
                     child: InkWell(
                       onTap: () async {
-                        await initPokeScrap(searchResults[index].id!);
+                        await initPokeScrap(searchResults[index].id);
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -97,7 +97,7 @@ class _SearchResultPageState extends State<SearchResultPage> {
 
     if (await webScraper.loadWebPage(endpoint)) {
       // 이전 검색값 초기화
-      searchResult = <SearchResult>[];
+      searchResult = <Pokemon>[];
 
       // 포켓몬 이름
       final nameElements = webScraper.getElement(
@@ -165,12 +165,18 @@ class _SearchResultPageState extends State<SearchResultPage> {
           []);
       final searchGroup = <String>[];
       groupElements.forEach((element) {
-        final addGroup = element['title'];
-        searchGroup.add(addGroup);
+        final group = element['title'];
+        searchGroup.add(group);
       });
 
-      searchResult.add(SearchResult('', searchNames[0], searchImgUrls[0],
-          searchType, searchDesc[0], searchAddDesc[0], searchGroup[0]));
+      searchResult.add(Pokemon(
+          id: searchIdx,
+          name: searchNames[0],
+          imgUrl: searchImgUrls[0],
+          type: searchType,
+          desc: searchDesc[0],
+          addDesc: searchAddDesc[0],
+          species: searchGroup[0]));
 
       if (mounted) {
         setState(() {

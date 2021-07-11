@@ -1,18 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex/managers/db_manager.dart';
+import 'package:pokedex/models/pokemon.dart';
 
-// 1-3. 리스트 화면 (임포트)
-class FavoritePage extends StatelessWidget {
+class FavoritePage extends StatefulWidget {
+  @override
+  _FavoritePageState createState() => _FavoritePageState();
+}
+
+class _FavoritePageState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
-    // 1-3. 리스트 화면 (동적 데이터 추가)
+    return Scaffold(
+        appBar: AppBar(title: Text('좋아하는 포켓몬')),
+        body: FutureBuilder(
+          future: DBHelper().getAllPokemon(),
+          builder:
+              (BuildContext context, AsyncSnapshot<List<Pokemon>> snapshot) {
+            if (snapshot.data != null) {
+              if (snapshot.data!.length != 0) {
+                return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Pokemon item = snapshot.data![index];
 
-    // 1-3. 리스트 화면 (초기 리스트 구현)
-    return Center(child: Text("favorite"));
+                      return Dismissible(
+                        key: UniqueKey(),
+                        onDismissed: (direction) {
+                          DBHelper().deletePokemon(item.name);
+                          setState(() {});
+                        },
+                        child: Center(child: Text(item.name)),
+                      );
+                    });
+              } else {
+                return Center(child: Text('데이터가 없습니다.'));
+              }
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        ));
   }
-
-// 1-3. 리스트 화면 (고정 더미 데이터)
-
-// 1-3. 리스트 화면 (동적 데이터 호출1)
-
-// 1-3. 리스트 화면 (관람 등급 이미지 버튼 함수 생성)
 }
