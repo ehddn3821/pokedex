@@ -35,9 +35,8 @@ class _DetailState extends State<DetailPage> {
         ),
         body: FutureBuilder(
           future: DBHelper().getPokemon(result.id),
-          builder:
-              (BuildContext context, AsyncSnapshot<Pokemon> snapshot) {
-                snapshot.hasData
+          builder: (BuildContext context, AsyncSnapshot<Pokemon> snapshot) {
+            snapshot.hasData
                 ? icon = Icons.favorite
                 : icon = Icons.favorite_border;
             return ListView(
@@ -47,7 +46,6 @@ class _DetailState extends State<DetailPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      // 좌우 화면크기랑 같게
                       children: [
                         Image.network(result.imgUrl),
                         SizedBox(height: 20.0),
@@ -70,8 +68,8 @@ class _DetailState extends State<DetailPage> {
                               color: Colors.red,
                               onPressed: () {
                                 snapshot.hasData
-                                ? DBHelper().deletePokemon(result.id)
-                                : DBHelper().createData(result);
+                                    ? DBHelper().deletePokemon(result.id)
+                                    : DBHelper().createData(result);
                                 setState(() {
                                   snapshot.hasData
                                       ? icon = Icons.favorite_border
