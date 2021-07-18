@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/managers/db_manager.dart';
 import 'package:pokedex/models/pokemon.dart';
 
+import 'detail_page.dart';
+
 class FavoritePage extends StatefulWidget {
   @override
   _FavoritePageState createState() => _FavoritePageState();
@@ -29,6 +31,8 @@ class _FavoritePageState extends State<FavoritePage> {
                     String pokeName2 =
                         item.name.substring(0, pokeNameLength - addDescIdx);
 
+                    var selectItem = <Pokemon>[];
+
                     return Container(
                       padding: EdgeInsets.only(left: 10.0, right: 10.0),
                       child: Row(
@@ -41,7 +45,18 @@ class _FavoritePageState extends State<FavoritePage> {
                           Expanded(flex: 3, child: SizedBox(width: 5.0)),
                           Expanded(
                               flex: 62,
-                              child: Column(
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    selectItem.add(item);
+                                  });
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              DetailPage(searchResult: selectItem)));
+                                },
+                                child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -61,7 +76,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                     style: TextStyle(fontSize: 16.0),
                                   ),
                                 ],
-                              )),
+                              ))),
                           Expanded(
                               flex: 10,
                               child: IconButton(
